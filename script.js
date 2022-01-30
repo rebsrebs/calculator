@@ -1,19 +1,19 @@
 
  
 const numbers = document.querySelector('.num');
-//const one = document.querySelector('#one');
 const userInputDisplay = document.querySelector('#userinputdisplay');
 const resultsDisplay = document.querySelector('#resultsdisplay');
 
-userInputDisplay.textContext = ' ';
-resultsDisplay.textContent = ' ';
+//defaults for displays
+//userInputDisplay.textContext = ' ';
+//resultsDisplay.textContent = ' ';
 
 //function to update the user input display
 const updateUserInputDisplay = function(input){
-  userInputDisplay.textContent += `${input}`;    
+    userInputDisplay.textContent += `${input}`;    
 }
 
-//add parentheses around current user input display
+//function to add parentheses around current user input display
 const surroundUserInputDisplay = function(){
     currentInputDisplay = userInputDisplay.textContent;
     userInputDisplay.textContent = `(${currentInputDisplay})`;
@@ -21,19 +21,15 @@ const surroundUserInputDisplay = function(){
 
 //function to update the results display
 const updateResultsDisplay = function(input){
-  resultsDisplay.textContent = input;    
+    resultsDisplay.textContent = input;    
 }
-
-
-
-
 
 //Setting defauls for variables
 let operandA = '';
 let operandB = '';
 let operator = '';
 let numValue = 0;
-//var operandsArray = [];  
+let equalsCheck = '';
 
 //Update the variables
 const updateOperandA = function(value){
@@ -50,20 +46,9 @@ const updateOperator = function(value){
 }  
 
 
-//random stuff
-/* numbers.onclick = function(event) {
-  let target = event.target;
-  i = 1;
-  if (event.target.className === 'num') {
-  }} */
+//BUTTONS
 
-
-
-
-
-
-//making number buttons work
-
+//C button clears all variables and displays
 clear.onclick = function(){
   userInputDisplay.textContent = ''; 
   resultsDisplay.textContent = ''; 
@@ -73,6 +58,7 @@ clear.onclick = function(){
   result = '';
 }
 
+//Number buttons
 zero.onclick = function(event) {
   updateUserInputDisplay(0);
   console.log(0);
@@ -134,37 +120,69 @@ nine.onclick = function(event) {
 }
 
 decimal.onclick = function(event) {
+    if (userInputDisplay.textContent.includes('.') !== true){
   updateUserInputDisplay('.');
   console.log('.');
   numValue = '.';
+    } else {
+        return;
+    }
 }
 
 //operator buttons
 
+
+//using add function rather than sum for now
 plus.onclick = function(event) {
+
+    if ((operandB)){
+        surroundUserInputDisplay(); 
+        updateUserInputDisplay(' + ');
+        console.log('+');
+        operatorValue = 'add';
+    } else {
   updateUserInputDisplay(' + ');
   console.log('+');
   operatorValue = 'add';
-}
+}}
 
 minus.onclick = function(event) {
+    if ((operandB)) {
+        surroundUserInputDisplay(); 
   updateUserInputDisplay(' - ');
   console.log('-');
   operatorValue = 'subtract';
-}
+} else {
+    updateUserInputDisplay(' - ');
+  console.log('-');
+  operatorValue = 'subtract';
+}}
 
 times.onclick = function(event) {
+    if ((operandB)) {
+        surroundUserInputDisplay(); 
   updateUserInputDisplay(' * ');
   console.log('*');
   operatorValue = 'multiply';
-}
+} else {
+    updateUserInputDisplay(' * ');
+  console.log('*');
+  operatorValue = 'multiply';
+}}
 
 divided.onclick = function(event) {
+    if ((operandB)) {
+        surroundUserInputDisplay(); 
   updateUserInputDisplay(' / ');
   console.log('/');
   operatorValue = 'divide';
-}
+} else {
+    updateUserInputDisplay(' / ');
+    console.log('/');
+    operatorValue = 'divide';
+}}
 
+//doesn't work yet
 percent.onclick = function(event) {
   updateUserInputDisplay('%');
   console.log('%');
@@ -172,8 +190,7 @@ percent.onclick = function(event) {
 }
 
 
-//operations
-
+//Operations
 
 const add = function(a,b) {
 	return a+b;
@@ -195,12 +212,13 @@ const multiply = function(arr) {
   });
   }
 
-  const divide = function(arr) {
+const divide = function(arr) {
     return arr.reduce((previous,current) => {
       return previous / current;
     });
     }
 
+//no buttons for these at the moment
 const power = function(a,b) {
 	return a**b;
 };
@@ -222,11 +240,14 @@ const factorial = function(a) {
 };
 
 
-//Performs the operations
+//Function to perform the operation on two operands
 const operate = function(operation,a,b){
   let answer = '';
+
   if (operation == subtract || operation == add){
   answer = operation(Number(a),Number(b));
+
+  //sum, divide, and multiply require an array of the two operands
   } else if (operation == sum || operation == divide || operation == multiply){
     answer = operation([Number(a),Number(b)]);
   }
@@ -247,54 +268,109 @@ console.log(`${target.id} was clicked`);
 //if button clicked is a number, and there is no operator yet
 //concat number value to operandA
 if (event.target.className === 'num button' && !operator == true){
-updateOperandA(numValue);
-console.log(`The first number is now ${operandA}`);
+    console.log('a number was pressed and there is no operator');
+    
+    if (equalsCheck === 0){
+        console.log('equals was not just pressed')
+        updateOperandA(numValue);
+        console.log(`The first number is now ${operandA}`);
+    } else if (equalsCheck === 1) {
+        console.log('equals was just pressed');
+//clear stuff if equals was just pressed
+    userInputDisplay.textContent = ''; 
+    resultsDisplay.textContent = ''; 
+    operandA = '';
+    operandB = '';
+    operator = '';
+    result = '';
+    equalsCheck = 0;
+        updateOperandA(numValue);
+        updateUserInputDisplay(String(numValue));
+        console.log(`The first number is now ${operandA}`);
+    }
 
 //if button clicked is an operator, save to operator variable
 } else if (event.target.className === 'operatorbtn button'){
-operator = operatorValue;
-console.log(`The operator is ${operatorValue}`);
+    equalsCheck = 0;
+
+
+     //if you've already typed 8 + 9 and then press another operator
+       //perform 8 + 9 first ...
+   if ((operandB)){
+       console.log('operandB has a value!')
+       //surroundUserInputDisplay(); 
+        if (operator === 'add') {
+        result = Number(operate(sum,operandA,operandB));
+        } else if (operator === 'subtract') {
+      result = Number(operate(subtract,operandA,operandB));
+        } else if (operator === 'multiply') {
+            surroundUserInputDisplay(); 
+      result = Number(operate(multiply,operandA,operandB));
+        } else if (operator === 'divide') {
+        result = Number(operate(divide,operandA,operandB));
+        }
+
+        console.log(`The result is ${result}`);
+        updateResultsDisplay(Number(result.toFixed(16)));
+        operandA = '';
+        operandA = Number(result);
+        operandB = '';
+        operator = operatorValue;
+        
+   
+    } else if (operandB == false) {
+    operator = operatorValue;
+    console.log(`The operator is ${operatorValue}`);}
 
 //if operator already saved, and button clickd is a number,
 //concat number to operandB
 } else if (event.target.className === 'num button' && (operator)){
+    console.log('a number was pressed and there is an operator');
 updateOperandB(numValue);
 console.log(`The second number is now ${operandB}`);
 
-//if equals button is clicked, run operate function
-//using operandA, operandB, and the operator
+//IF EQUALS IS CLICKED
+//run operate function using operandA, operandB, and the operator
 //send the result to the result display
 } else if (event.target.id === 'equals'){
   let result = '';
+  equalsCheck = 1;
+  console.log('equals was just pressed');
 
     if (operatorValue === 'add') {
+        console.log(`operand A is ${operandA}. operandB is ${operandB}. operator is ${operator}.`)
       result = Number(operate(sum,operandA,operandB));
     } else if (operatorValue === 'subtract') {
       result = Number(operate(subtract,operandA,operandB));
     } else if (operatorValue === 'multiply') {
       result = Number(operate(multiply,operandA,operandB));
     } else if (operatorValue === 'divide') {
+        if (operandB === 0){
+            console.log('no');
+        } else {
       result = Number(operate(divide,operandA,operandB));
-    }
+    }}
   console.log(`The result is ${result}`);
   updateResultsDisplay(Number(result.toFixed(16)));
   operandA = result;
   operandB = '';
+  operatorValue = '';
   operator = '';
-  //experiment to add parentheses around current user input display
   surroundUserInputDisplay();
   return;
 
 
-  //I think I need some kind of for loop for putting the result in operandA for the next operation
-//resultsDisplay.textContext = `The result is ${result}`;
-//} else if (event.target.className === 'num button' && (result)){ }
+
 }
 });
 
 
 
 
+
+//Display a snarky error message if the user tries to divide by 0… don’t let it crash your calculator!
+//if operator is divide and operandB is 0 etc. then when you press =
+//return the error message.
 
 
 // Do not edit below this line
