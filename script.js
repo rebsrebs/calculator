@@ -29,7 +29,8 @@ let operandA = '';
 let operandB = '';
 let operator = '';
 let numValue = 0;
-let equalsCheck = '';
+let equalsCheck = 0;
+let percentValue = '';
 
 //Update the variables
 const updateOperandA = function(value){
@@ -184,10 +185,21 @@ divided.onclick = function(event) {
 
 //doesn't work yet
 percent.onclick = function(event) {
-  updateUserInputDisplay('%');
+  updateUserInputDisplay(' % ');
   console.log('%');
-  operatorValue = '%';
+  //calculate percentage value using two operands and store to percentValue
 }
+
+plusminus.onclick = function(event) {
+    if ((operandB)){
+
+    }
+    //update user display, how? search from end of userdisplay 
+    //and replace operand with operand * -1?
+    //if operandB exists, multiply by -1
+    //otherwise multiply operandA by -1
+    console.log('plus minus was clicked');
+  }
 
 
 //Operations
@@ -265,18 +277,26 @@ calccontainer.addEventListener("click", function(event) {
 let target = event.target;
 console.log(`${target.id} was clicked`);
 
-//if button clicked is a number, and there is no operator yet
-//concat number value to operandA
+
+
+
+//IF NUMBER BUTTON PUSHED
+
+//if there is no operator
 if (event.target.className === 'num button' && !operator == true){
     console.log('a number was pressed and there is no operator');
     
+    //and equals was not just pressed, concat number value to operandA
     if (equalsCheck === 0){
         console.log('equals was not just pressed')
         updateOperandA(numValue);
         console.log(`The first number is now ${operandA}`);
+
+//if equals was just pressed      
     } else if (equalsCheck === 1) {
         console.log('equals was just pressed');
-//clear stuff if equals was just pressed
+
+//clear everything before saving and displaying number to operandA
     userInputDisplay.textContent = ''; 
     resultsDisplay.textContent = ''; 
     operandA = '';
@@ -284,18 +304,20 @@ if (event.target.className === 'num button' && !operator == true){
     operator = '';
     result = '';
     equalsCheck = 0;
-        updateOperandA(numValue);
-        updateUserInputDisplay(String(numValue));
-        console.log(`The first number is now ${operandA}`);
+    updateOperandA(numValue);
+    updateUserInputDisplay(String(numValue));
+    console.log(`The first number is now ${operandA}`);
     }
 
-//if button clicked is an operator, save to operator variable
+
+//IF OPERATOR BUTTON PUSHED
+//clear equals check
 } else if (event.target.className === 'operatorbtn button'){
     equalsCheck = 0;
 
 
-     //if you've already typed 8 + 9 and then press another operator
-       //perform 8 + 9 first ...
+ //If operandB has a value, calculate and display result before 
+ //saving button pushed to operator value
    if ((operandB)){
        console.log('operandB has a value!')
        //surroundUserInputDisplay(); 
@@ -340,16 +362,24 @@ console.log(`The second number is now ${operandB}`);
     if (operatorValue === 'add') {
         console.log(`operand A is ${operandA}. operandB is ${operandB}. operator is ${operator}.`)
       result = Number(operate(sum,operandA,operandB));
+
     } else if (operatorValue === 'subtract') {
       result = Number(operate(subtract,operandA,operandB));
+
     } else if (operatorValue === 'multiply') {
       result = Number(operate(multiply,operandA,operandB));
+
     } else if (operatorValue === 'divide') {
-        if (operandB === 0){
-            console.log('no');
+        if (operandB === 0 | operandB === '0'){
+            //I have to get it to not do te operation and just
+            //save the result as a string
+           // updateResultsDisplay('YOLO');
+            console.log('Do not divide by zero please');
+            result = Infinity;
         } else {
       result = Number(operate(divide,operandA,operandB));
-    }}
+   }
+}
   console.log(`The result is ${result}`);
   updateResultsDisplay(Number(result.toFixed(16)));
   operandA = result;
@@ -357,6 +387,9 @@ console.log(`The second number is now ${operandB}`);
   operatorValue = '';
   operator = '';
   surroundUserInputDisplay();
+  //note to self, remove this surroundUserInputDisplay
+  //and make switch case for if equals was just pressed
+  //and you press an operator, add parenthesis then.
   return;
 
 
