@@ -15,8 +15,12 @@ const updateUserInputDisplay = function(input){
 
 //function to add parentheses around current user input display
 const surroundUserInputDisplay = function(){
+    //generate random color for parentheses each time they are added
+    var randomColor = Math.floor(Math.random()*16777215).toString(16);
+    //
     currentInputDisplay = userInputDisplay.textContent;
     userInputDisplay.textContent = `(${currentInputDisplay})`;
+    //userInputDisplay.textContent = `<span style="color:randomColor">(</span>${currentInputDisplay}<span style="color:randomColor">)</span>`;
 }
 
 //function to update the results display
@@ -28,8 +32,10 @@ const updateResultsDisplay = function(input){
 let operandA = '';
 let operandB = '';
 let operator = '';
+let operatorValue = '';
 let numValue = 0;
 let equalsCheck = 0;
+//let percentCheck = 0;
 let percentValue = '';
 
 //Update the variables
@@ -183,11 +189,30 @@ divided.onclick = function(event) {
     operatorValue = 'divide';
 }}
 
-//doesn't work yet
+//WHEN YOU CLICK PERCENT BUTTON
 percent.onclick = function(event) {
-  updateUserInputDisplay(' % ');
+    //percentCheck = 1;
+  updateUserInputDisplay('% ');
   console.log('%');
+    //if there is no operandB just convert operandA to percent of 100, like 9 is .09
+    if ((operandB) == false){
+        console.log('there is no operandB!')
+        operandA = operandA/100;
+        updateResultsDisplay(Number(operandA.toFixed(16)));
+          //if there is an operandB
   //calculate percentage value using two operands and store to percentValue
+  //what is operandB percent of operandA? 
+  //operandB divided by 100 times operandA
+    } else if (operandB){
+        console.log('there is an operandB!')
+percentValue = (operandB/100) * operandA;
+console.log(`The precent value is ${percentValue}`);
+        updateResultsDisplay(Number(percentValue.toFixed(16)));
+        //make operandB be the percentValue, then clear the percentValue
+        operandB = percentValue;
+        console.log(`operandB is now ${operandB}.`)
+        percentValue = '';
+    }
 }
 
 plusminus.onclick = function(event) {
@@ -310,10 +335,29 @@ if (event.target.className === 'num button' && !operator == true){
     }
 
 
+//I THINK I DON'T NEED THIS NOW
+//if percentCheck = 1, so like 8+50% 
+//results display is 4
+//operandB is now 4
+//if another operator is clicked, 
+//perform the previous operation between operandA and operandB and save as result and display
+//save that result as operandA
+//store the new operatorValue
+//what should go to the userInputDisplay?
+//tis should work for pressing percent after only setting operandA or also with operandB. 
+//
+//if operator pushed and percentCheck = 1
+//if equals pushed and percentCheck = 1
+//percentCheck=0
+//equalsCheck=1
+
+
+
 //IF OPERATOR BUTTON PUSHED
 //clear equals check
 } else if (event.target.className === 'operatorbtn button'){
     equalsCheck = 0;
+    //do I want to clear percentCheck?
 
 
  //If operandB has a value, calculate and display result before 
@@ -358,8 +402,27 @@ console.log(`The second number is now ${operandB}`);
   let result = '';
   equalsCheck = 1;
   console.log('equals was just pressed');
+  console.log(`operandB is ${operandB}`);
 
-    if (operatorValue === 'add') {
+
+  //IN PROGRESS
+  //where does this go??
+  //if you have "2 + ="  make operandB be the same as operandA
+  //then run operation. Why did changing it from == true to !== false fix it?
+ if ((operandB == false) && (operator !== false)){
+    console.log('equals was pressed and there is no operandB!');
+    operandB = operandA;
+    updateUserInputDisplay(operandB);
+ }
+
+//if you typ "2 =" you should just get 2. Return operandA.
+if ((operandB == false) && (operatorValue == false)){
+    console.log('equals was pressed and there is no operator.');
+    console.log(operandA);
+        result = Number(operandA);
+        console.log(result);
+
+} else if (operatorValue === 'add') {
         console.log(`operand A is ${operandA}. operandB is ${operandB}. operator is ${operator}.`)
       result = Number(operate(sum,operandA,operandB));
 
@@ -371,21 +434,25 @@ console.log(`The second number is now ${operandB}`);
 
     } else if (operatorValue === 'divide') {
         if (operandB === 0 | operandB === '0'){
-            //I have to get it to not do te operation and just
-            //save the result as a string
-           // updateResultsDisplay('YOLO');
+            //I have to get it to not do operation and just return infinity
             console.log('Do not divide by zero please');
-            result = Infinity;
+            //resultsDisplay.textContent = 'Infinity, wow!';
+            //if I returned as a snarky string instead, i would have to then clear it with 
+            //the next buttons
+    result = Infinity; 
+            
         } else {
       result = Number(operate(divide,operandA,operandB));
    }
 }
   console.log(`The result is ${result}`);
+  console.log(typeof result);
   updateResultsDisplay(Number(result.toFixed(16)));
   operandA = result;
   operandB = '';
   operatorValue = '';
   operator = '';
+  //percentCheck = 0;
   surroundUserInputDisplay();
   //note to self, remove this surroundUserInputDisplay
   //and make switch case for if equals was just pressed
