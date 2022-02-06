@@ -388,7 +388,7 @@ if (event.target.className === 'num button' && !operator == true){
     operator = operatorValue;
     console.log(`The operator is ${operatorValue}`);}
 
-//if operator already saved, and button clickd is a number,
+//if operator already saved, and button clicked is a number,
 //concat number to operandB
 } else if (event.target.className === 'num button' && (operator)){
     console.log('a number was pressed and there is an operator');
@@ -396,6 +396,7 @@ updateOperandB(numValue);
 console.log(`The second number is now ${operandB}`);
 
 //IF EQUALS IS CLICKED
+
 //run operate function using operandA, operandB, and the operator
 //send the result to the result display
 } else if (event.target.id === 'equals'){
@@ -404,25 +405,32 @@ console.log(`The second number is now ${operandB}`);
   console.log('equals was just pressed');
   console.log(`operandB is ${operandB}`);
 
+   
+  //If there is no operandB
+    if (operandB == false) {
+    console.log(`equals pressed and there is no operandB and operatorValue is ${operatorValue}`)
+        //If there is no operator just return operandA
+        if (operatorValue == false){
+            console.log(`equals pressed, there is no operator, and operandA is ${operandA}`);
+            result = Number(operandA);
+            console.log(`The result is ${result}`);
+  console.log(typeof result);
+  updateResultsDisplay(Number(result.toFixed(16)));
+  operandA = result;
+  operandB = '';
+  operatorValue = '';
+  operator = '';
+  surroundUserInputDisplay();
+            return;
+        //If there is an operator, make operandB the same as operandA
+        } else if (operatorValue !== false) {
+            operandB = operandA;
+            updateUserInputDisplay(operandB);
+        }
+   }
 
-  //IN PROGRESS
-  //where does this go??
-  //if you have "2 + ="  make operandB be the same as operandA
-  //then run operation. Why did changing it from == true to !== false fix it?
- if ((operandB == false) && (operator !== false)){
-    console.log('equals was pressed and there is no operandB!');
-    operandB = operandA;
-    updateUserInputDisplay(operandB);
- }
-
-//if you typ "2 =" you should just get 2. Return operandA.
-if ((operandB == false) && (operatorValue == false)){
-    console.log('equals was pressed and there is no operator.');
-    console.log(operandA);
-        result = Number(operandA);
-        console.log(result);
-
-} else if (operatorValue === 'add') {
+    
+    if (operatorValue === 'add') {
         console.log(`operand A is ${operandA}. operandB is ${operandB}. operator is ${operator}.`)
       result = Number(operate(sum,operandA,operandB));
 
