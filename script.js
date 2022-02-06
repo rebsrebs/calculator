@@ -137,6 +137,7 @@ decimal.onclick = function(event) {
 }
 
 //operator buttons
+//need to add something so if operatorValue already exists, don't do anything
 
 
 //using add function rather than sum for now
@@ -317,7 +318,8 @@ if (event.target.className === 'num button' && !operator == true){
         updateOperandA(numValue);
         console.log(`The first number is now ${operandA}`);
 
-//if equals was just pressed      
+//if equals was just pressed   
+//should I say OR if snarkCheck = 1   
     } else if (equalsCheck === 1) {
         console.log('equals was just pressed');
 
@@ -329,27 +331,11 @@ if (event.target.className === 'num button' && !operator == true){
     operator = '';
     result = '';
     equalsCheck = 0;
+    //snarkCheck = 0;
     updateOperandA(numValue);
-    updateUserInputDisplay(String(numValue));
+    updateUserInputDisplay(String(numValue)); //I forgt why this says string
     console.log(`The first number is now ${operandA}`);
     }
-
-
-//I THINK I DON'T NEED THIS NOW
-//if percentCheck = 1, so like 8+50% 
-//results display is 4
-//operandB is now 4
-//if another operator is clicked, 
-//perform the previous operation between operandA and operandB and save as result and display
-//save that result as operandA
-//store the new operatorValue
-//what should go to the userInputDisplay?
-//tis should work for pressing percent after only setting operandA or also with operandB. 
-//
-//if operator pushed and percentCheck = 1
-//if equals pushed and percentCheck = 1
-//percentCheck=0
-//equalsCheck=1
 
 
 
@@ -358,6 +344,7 @@ if (event.target.className === 'num button' && !operator == true){
 } else if (event.target.className === 'operatorbtn button'){
     equalsCheck = 0;
     //do I want to clear percentCheck?
+    //add a case where if there is already an operatorValue, just return, don't do anything.
 
 
  //If operandB has a value, calculate and display result before 
@@ -405,9 +392,9 @@ console.log(`The second number is now ${operandB}`);
   console.log('equals was just pressed');
   console.log(`operandB is ${operandB}`);
 
-   
+  
   //If there is no operandB
-    if (operandB == false) {
+    if (operandB === '') {
     console.log(`equals pressed and there is no operandB and operatorValue is ${operatorValue}`)
         //If there is no operator just return operandA
         if (operatorValue == false){
@@ -444,10 +431,13 @@ console.log(`The second number is now ${operandB}`);
         if (operandB === 0 | operandB === '0'){
             //I have to get it to not do operation and just return infinity
             console.log('Do not divide by zero please');
-            //resultsDisplay.textContent = 'Infinity, wow!';
-            //if I returned as a snarky string instead, i would have to then clear it with 
-            //the next buttons
-    result = Infinity; 
+            resultsDisplay.textContent = 'Undefined';
+            //alert('It is not possible to divide by zero');
+            operandA = '';
+            operandB = '';
+            operatorValue = '';
+            operator = '';
+            return;
             
         } else {
       result = Number(operate(divide,operandA,operandB));
