@@ -370,7 +370,7 @@ if (event.target.className === 'num button' && !operator == true){
         } else if (operator === 'subtract') {
       result = Number(operate(subtract,operandA,operandB));
         } else if (operator === 'multiply') {
-            surroundUserInputDisplay(); 
+            //surroundUserInputDisplay(); 
       result = Number(operate(multiply,operandA,operandB));
         } else if (operator === 'divide') {
         result = Number(operate(divide,operandA,operandB));
