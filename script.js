@@ -4,23 +4,44 @@ const numbers = document.querySelector('.num');
 const userInputDisplay = document.querySelector('#userinputdisplay');
 const resultsDisplay = document.querySelector('#resultsdisplay');
 
-//defaults for displays
-//userInputDisplay.textContext = ' ';
-//resultsDisplay.textContent = ' ';
+const dotDotDot = '... ';
+
 
 //function to update the user input display
 const updateUserInputDisplay = function(input){
     userInputDisplay.textContent += `${input}`;    
 }
 
+
+
+//
+
+
+//THIS DOES NOT WORK
+//if user input gets too long start from 4 characters in and add ... to the beginning
+/* 
+const updateUserInputDisplay = function(input){
+    
+    currentInputDisplay = userInputDisplay.textContent;   
+
+console.log(currentInputDisplay.length);
+    if (currentInputDisplay.length < 30) {
+        console.log('user display is short enough')
+        userInputDisplay.textContent += `${input}`; 
+    } else {
+        console.log('user display is too long')
+        //THIS PART DOES NOT WORK YET
+        userInputDisplay.textContent = dotDotDot + currentInputDisplay.substring(3);
+    }}
+     */
+
+
+
 //function to add parentheses around current user input display
 const surroundUserInputDisplay = function(){
-    //generate random color for parentheses each time they are added
-    var randomColor = Math.floor(Math.random()*16777215).toString(16);
-    //
     currentInputDisplay = userInputDisplay.textContent;
     userInputDisplay.textContent = `(${currentInputDisplay})`;
-    //userInputDisplay.textContent = `<span style="color:randomColor">(</span>${currentInputDisplay}<span style="color:randomColor">)</span>`;
+   
 }
 
 //function to update the results display
@@ -55,7 +76,7 @@ const updateOperator = function(value){
 
 //BUTTONS
 
-//C button clears all variables and displays
+//AC button clears all variables and displays
 clear.onclick = function(){
   userInputDisplay.textContent = ''; 
   resultsDisplay.textContent = ''; 
@@ -136,11 +157,11 @@ decimal.onclick = function(event) {
     }
 }
 
-//operator buttons
+//OPERATOR BUTTONS
 //need to add something so if operatorValue already exists, don't do anything
 
 
-//using add function rather than sum for now
+//Plus button - using add instead of sum for now
 plus.onclick = function(event) {
 
     if ((operandB)){
@@ -154,6 +175,7 @@ plus.onclick = function(event) {
   operatorValue = 'add';
 }}
 
+//Minus button
 minus.onclick = function(event) {
     if ((operandB)) {
         surroundUserInputDisplay(); 
@@ -166,6 +188,7 @@ minus.onclick = function(event) {
   operatorValue = 'subtract';
 }}
 
+//Multiplication button
 times.onclick = function(event) {
     if ((operandB)) {
         surroundUserInputDisplay(); 
@@ -178,6 +201,7 @@ times.onclick = function(event) {
   operatorValue = 'multiply';
 }}
 
+//Divided button
 divided.onclick = function(event) {
     if ((operandB)) {
         surroundUserInputDisplay(); 
@@ -202,8 +226,7 @@ percent.onclick = function(event) {
         updateResultsDisplay(Number(operandA.toFixed(16)));
           //if there is an operandB
   //calculate percentage value using two operands and store to percentValue
-  //what is operandB percent of operandA? 
-  //operandB divided by 100 times operandA
+  //operandB is a percent of operandA? 
     } else if (operandB){
         console.log('there is an operandB!')
 percentValue = (operandB/100) * operandA;
@@ -216,16 +239,18 @@ console.log(`The precent value is ${percentValue}`);
     }
 }
 
+//Plus Minus button
 plusminus.onclick = function(event) {
+    //find better way to update user input display
+    updateUserInputDisplay(' * -1');
+    surroundUserInputDisplay();
     if ((operandB)){
-
-    }
-    //update user display, how? search from end of userdisplay 
-    //and replace operand with operand * -1?
-    //if operandB exists, multiply by -1
-    //otherwise multiply operandA by -1
+        operandB = operandB*(-1);
+    } else {
+        operandA = operandA*(-1);
+}
     console.log('plus minus was clicked');
-  }
+}
 
 
 //Operations
