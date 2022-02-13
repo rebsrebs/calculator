@@ -48,6 +48,8 @@ body {
     color:rgb(97, 143, 97);
     margin:0px 0px 0px 0px;
     text-align: right;
+    max-height:2.2em;
+    overflow: scroll;
   }
 
   #resultsdisplay{
