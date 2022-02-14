@@ -25,11 +25,6 @@ body {
 }
 
 
-@media only screen and (max-width: 600px) {
-  #calccontainer {
-    width:200px;
-    }
-}
 
 #display {
     padding:12px;
@@ -75,7 +70,7 @@ display:grid;
 align-items:center;
 justify-content: center;
 border-radius:5px;
-font-size:26px;
+font-size:3vmin;
 color:blue;
 /* border-style: solid outset solid solid;
 border-color:orange; */
