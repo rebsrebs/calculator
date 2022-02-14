@@ -1,8 +1,11 @@
 
  
-const numbers = document.querySelector('.num');
+const numberButtons = document.querySelector('.num');
 const userInputDisplay = document.querySelector('#userinputdisplay');
 const resultsDisplay = document.querySelector('#resultsdisplay');
+
+//in progress experiment to update user input display a different way
+//const userInputDisplayArray = [];
 
 const dotDotDot = '... ';
 
@@ -13,17 +16,11 @@ const updateUserInputDisplay = function(input){
 }
 
 
-
-//
-
-
-//THIS DOES NOT WORK
-//if user input gets too long start from 4 characters in and add ... to the beginning
 /* 
+FAILED ATTEMPT TO SHORTEN USER INPUT DISPLAY with elipses at front
+//if user input gets too long start from 4 characters in and add ... to the beginning
 const updateUserInputDisplay = function(input){
-    
     currentInputDisplay = userInputDisplay.textContent;   
-
 console.log(currentInputDisplay.length);
     if (currentInputDisplay.length < 30) {
         console.log('user display is short enough')
@@ -46,8 +43,17 @@ const surroundUserInputDisplay = function(){
 
 //function to update the results display
 const updateResultsDisplay = function(input){
+  //Make input have 8 decimals or less and then make it a number
+  input = Number(input.toFixed(8));
+  //check length of input
+  let inputLength = input.toString().length;
+  console.log(inputLength);
+    if (inputLength > 16){
+    input = Number(input).toExponential(3);
+    resultsDisplay.textContent = input;
+    }else{    
     resultsDisplay.textContent = input;    
-}
+}}
 
 //Setting defauls for variables
 let operandA = '';
@@ -86,7 +92,27 @@ clear.onclick = function(){
   result = '';
 }
 
+
+
+
+
 //Number buttons
+/*
+For Each Loop in progress
+
+numberButtons.forEach (?) => {
+let numTarget = event.numTarget;
+updateUserInputDisplay(numTarget.textContent);
+console.log(numTarget.textContent);
+numValue = numTarget.textContent;
+}
+
+
+*/
+
+
+
+
 zero.onclick = function(event) {
   updateUserInputDisplay(0);
   console.log(0);
@@ -223,7 +249,7 @@ percent.onclick = function(event) {
     if ((operandB) == false){
         console.log('there is no operandB!')
         operandA = operandA/100;
-        updateResultsDisplay(Number(operandA.toFixed(16)));
+        updateResultsDisplay(operandA);
           //if there is an operandB
   //calculate percentage value using two operands and store to percentValue
   //operandB is a percent of operandA? 
@@ -231,7 +257,7 @@ percent.onclick = function(event) {
         console.log('there is an operandB!')
 percentValue = (operandB/100) * operandA;
 console.log(`The precent value is ${percentValue}`);
-        updateResultsDisplay(Number(percentValue.toFixed(16)));
+updateResultsDisplay(percentValue);
         //make operandB be the percentValue, then clear the percentValue
         operandB = percentValue;
         console.log(`operandB is now ${operandB}.`)
@@ -343,8 +369,7 @@ if (event.target.className === 'num button' && !operator == true){
         updateOperandA(numValue);
         console.log(`The first number is now ${operandA}`);
 
-//if equals was just pressed   
-//should I say OR if snarkCheck = 1   
+//if equals was just pressed     
     } else if (equalsCheck === 1) {
         console.log('equals was just pressed');
 
@@ -356,7 +381,6 @@ if (event.target.className === 'num button' && !operator == true){
     operator = '';
     result = '';
     equalsCheck = 0;
-    //snarkCheck = 0;
     updateOperandA(numValue);
     updateUserInputDisplay(String(numValue)); //I forgt why this says string
     console.log(`The first number is now ${operandA}`);
@@ -389,7 +413,7 @@ if (event.target.className === 'num button' && !operator == true){
         }
 
         console.log(`The result is ${result}`);
-        updateResultsDisplay(Number(result.toFixed(16)));
+        updateResultsDisplay(result);
         operandA = '';
         operandA = Number(result);
         operandB = '';
@@ -427,7 +451,7 @@ console.log(`The second number is now ${operandB}`);
             result = Number(operandA);
             console.log(`The result is ${result}`);
   console.log(typeof result);
-  updateResultsDisplay(Number(result.toFixed(16)));
+  updateResultsDisplay(result);
   operandA = result;
   operandB = '';
   operatorValue = '';
@@ -470,7 +494,8 @@ console.log(`The second number is now ${operandB}`);
 }
   console.log(`The result is ${result}`);
   console.log(typeof result);
-  updateResultsDisplay(Number(result.toFixed(16)));
+  //updateResultsDisplay((Number(result)).toFixed(10));
+  updateResultsDisplay(result);
   operandA = result;
   operandB = '';
   operatorValue = '';
@@ -489,11 +514,6 @@ console.log(`The second number is now ${operandB}`);
 
 
 
-
-
-//Display a snarky error message if the user tries to divide by 0… don’t let it crash your calculator!
-//if operator is divide and operandB is 0 etc. then when you press =
-//return the error message.
 
 
 // Do not edit below this line
